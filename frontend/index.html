@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Smart Farming Dashboard</title>
+    <style>
+        body {
+            font-family: Arial;
+            padding: 20px;
+        }
+        input, button {
+            margin: 5px;
+            padding: 8px;
+        }
+    </style>
+</head>
+
+<body>
+
+<h2>🌱 Smart Farming Dashboard</h2>
+
+<h3>Enter Sensor Data</h3>
+
+<label>Moisture:</label>
+<input type="number" id="moisture"><br>
+
+<label>Temperature:</label>
+<input type="number" id="temperature"><br>
+
+<button onclick="predict()">Check Irrigation</button>
+<button onclick="loadData()">Load Live Data</button>
+
+<h3 id="result"></h3>
+
+<hr>
+
+<h3>💬 Chatbot</h3>
+
+<input type="text" id="query" placeholder="Ask something...">
+<button onclick="chat()">Ask</button>
+
+<p id="chatResponse"></p>
+
+<script>
+
+// 🔐 Predict with API Key
+function predict() {
+    let moisture = document.getElementById("moisture").value;
+    let temperature = document.getElementById("temperature").value;
+
+    fetch("http://127.0.0.1:5000/predict", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "X-API-KEY": "12345"
+        },
+        body: JSON.stringify({
+            moisture: parseInt(moisture),
+            temperature: parseInt(temperature)
+        })
+    })
+    .then(res => res.json())
+    .then(data => {
+        if(data.error){
+            document.getElementById("result").innerText = data.error;
+        } else {
+            document.getElementById("result").innerText =
+                "Irrigation Needed: " + data.irrigation;
+        }
+    })
+    .catch(err => {
+        document.getElementById("result").innerText = "Error connecting to backend";
+    });
+}
+
+// 🤖 Chatbot
+function chat() {
+    let query = document.getElementById("query").value.toLowerCase();
+
+    let moisture = document.getElementById("moisture").value;
+    let temperature = document.getElementById("temperature").value;
+
+    if(query.includes("water")) {
+        if(moisture < 40)
+            document.getElementById("chatResponse").innerText =
+                "Soil moisture is low → Irrigation required";
+        else
+            document.getElementById("chatResponse").innerText =
+                "Soil moisture is sufficient → No irrigation needed";
+    }
+    else if(query.includes("temperature")) {
+        document.getElementById("chatResponse").innerText =
+            "Temperature is " + temperature + "°C";
+    }
+    else if(query.includes("moisture")) {
+        document.getElementById("chatResponse").innerText =
+            "Soil moisture is " + moisture;
+    }
+    else {
+        document.getElementById("chatResponse").innerText =
+            "Sorry, I didn't understand.";
+    }
+}
+
+// ☁️ Load data from ThingSpeak
+function loadData() {
+    fetch("https://api.thingspeak.com/channels/3339987/feeds/last.json")
+    .then(res => res.json())
+    .then(data => {
+        document.getElementById("moisture").value = data.field1;
+        document.getElementById("temperature").value = data.field2;
+    })
+    .catch(err => {
+        alert("Error fetching data from cloud");
+    });
+}
+
+</script>
+
+</body>
+</html>
