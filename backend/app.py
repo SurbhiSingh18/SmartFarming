@@ -10,7 +10,7 @@ app = Flask(__name__)
 CORS(app)
 
 # 🔐 Secret API Key
-API_KEY = os.getenv("API_KEY")
+API_KEY = 12345
 
 # 🤖 Load ML model
 model = pickle.load(open('../ml_model/model.pkl', 'rb'))
