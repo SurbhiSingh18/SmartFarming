@@ -5,40 +5,126 @@
     <style>
         body {
             font-family: Arial;
-            padding: 20px;
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;   /* horizontal center */
+            align-items: center;       /* vertical center */
+            background: linear-gradient(to right, #d4fc79, #96e6a1);
         }
+
+        h2 {
+            color: #2e7d32;
+        }
+
         input, button {
             margin: 5px;
             padding: 8px;
         }
+
+        button {
+            background-color: #2e7d32;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #1b5e20;
+        }
+
+        .input-group {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 10px 0;
+        }
+
+        .input-group label {
+            width: 120px;
+            font-weight: bold;
+        }
+
+        .input-group input {
+            flex: 1;
+        }
+
+        #container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            width: 350px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.2);
+        }
+
+        #bar {
+            width: 100%;
+            height: 20px;
+            background: #ccc;
+            border-radius: 10px;
+            margin-top: 10px;
+        }
+
+        #fill {
+            height: 20px;
+            background: green;
+            width: 0%;
+            border-radius: 10px;
+        }
+
+        #chatbox {
+            border: 1px solid #ccc;
+            padding: 10px;
+            border-radius: 10px;
+            background: #f9f9f9;
+        }
+
+
     </style>
 </head>
 
 <body>
 
+<div id="container">
+
 <h2>🌱 Smart Farming Dashboard</h2>
 
 <h3>Enter Sensor Data</h3>
 
-<label>Moisture:</label>
-<input type="number" id="moisture"><br>
+<div class="input-group">
+    <label>Moisture:</label>
+    <input type="number" id="moisture">
+</div>
 
-<label>Temperature:</label>
-<input type="number" id="temperature"><br>
+<div class="input-group">
+    <label>Temperature:</label>
+    <input type="number" id="temperature">
+</div>
 
 <button onclick="predict()">Check Irrigation</button>
 <button onclick="loadData()">Load Live Data</button>
 
 <h3 id="result"></h3>
 
+<h4 id="status"></h4>
+
+<!-- Moisture Bar -->
+<div id="bar">
+    <div id="fill"></div>
+</div>
+
 <hr>
 
 <h3>💬 Chatbot</h3>
 
-<input type="text" id="query" placeholder="Ask something...">
-<button onclick="chat()">Ask</button>
+<div id="chatbox">
+    <input type="text" id="query" placeholder="Ask something...">
+    <button onclick="chat()">Ask</button>
+    <p id="chatResponse"></p>
+</div>
 
-<p id="chatResponse"></p>
+</div>
 
 <script>
 
@@ -64,15 +150,27 @@ function predict() {
             document.getElementById("result").innerText = data.error;
         } else {
             document.getElementById("result").innerText =
-                "Irrigation Needed: " + data.irrigation;
+                data.irrigation === "Yes"
+                ? "💧 Irrigation Needed"
+                : "🌿 No Irrigation Needed";
         }
+
+        // 🌡️ Status Indicator
+        if(moisture < 40) {
+            document.getElementById("status").innerText = "⚠️ Soil is Dry";
+        } else {
+            document.getElementById("status").innerText = "✅ Soil is Healthy";
+        }
+
+        // 💧 Moisture Bar
+        document.getElementById("fill").style.width = moisture + "%";
     })
     .catch(err => {
         document.getElementById("result").innerText = "Error connecting to backend";
     });
 }
 
-// 🤖 Chatbot
+// 🤖 Chatbot (unchanged logic)
 function chat() {
     let query = document.getElementById("query").value.toLowerCase();
 
@@ -101,7 +199,7 @@ function chat() {
     }
 }
 
-// ☁️ Load data from ThingSpeak
+// ☁️ Load data from ThingSpeak (unchanged logic)
 function loadData() {
     fetch("https://api.thingspeak.com/channels/3339987/feeds/last.json")
     .then(res => res.json())
