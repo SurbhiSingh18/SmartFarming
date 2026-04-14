@@ -23,15 +23,18 @@ def generate_hash(data):
 
 @app.before_request
 def limit_requests():
+    if request.method == "OPTIONS":
+        return
+
     ip = request.remote_addr
     current_time = time()
 
     if ip not in request_log:
         request_log[ip] = []
 
-    request_log[ip] = [t for t in request_log[ip] if current_time - t < 10]
+    request_log[ip] = [t for t in request_log[ip] if current_time - t < 30]
 
-    if len(request_log[ip]) > 5:
+    if len(request_log[ip]) > 20:
         log_request(ip, "Rate limit exceeded")
         return jsonify({"error": "Too many requests. Try later."}), 429
 
