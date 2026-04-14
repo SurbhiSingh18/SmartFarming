@@ -8,8 +8,8 @@
             margin: 0;
             height: 100vh;
             display: flex;
-            justify-content: center;   /* horizontal center */
-            align-items: center;       /* vertical center */
+            justify-content: center;
+            align-items: center;
             background: linear-gradient(to right, #d4fc79, #96e6a1);
         }
 
@@ -79,8 +79,6 @@
             border-radius: 10px;
             background: #f9f9f9;
         }
-
-
     </style>
 </head>
 
@@ -102,14 +100,13 @@
     <input type="number" id="temperature">
 </div>
 
-<button onclick="predict()">Check Irrigation</button>
+<!-- ✅ IMPORTANT FIX -->
+<button onclick="predict(event)">Check Irrigation</button>
 <button onclick="loadData()">Load Live Data</button>
 
 <h3 id="result"></h3>
-
 <h4 id="status"></h4>
 
-<!-- Moisture Bar -->
 <div id="bar">
     <div id="fill"></div>
 </div>
@@ -128,10 +125,31 @@
 
 <script>
 
-// 🔐 Predict with API Key
-function predict() {
+// 🚫 PREVENT ENTER KEY REFRESH (ONLY KEEP THIS ONE)
+document.addEventListener("keydown", function(event) {
+    if (event.key === "Enter") {
+        event.preventDefault();
+    }
+});
+
+// 🔐 Predict (FINAL FIX)
+let isLoading = false;
+
+function predict(event) {
+
+    event.preventDefault(); // 🔥 MAIN FIX (stops refresh)
+
+    if(isLoading) return;
+    isLoading = true;
+
     let moisture = document.getElementById("moisture").value;
     let temperature = document.getElementById("temperature").value;
+
+    if(moisture === "" || temperature === "") {
+        alert("Please enter both values!");
+        isLoading = false;
+        return;
+    }
 
     fetch("http://127.0.0.1:5000/predict", {
         method: "POST",
@@ -140,75 +158,69 @@ function predict() {
             "X-API-KEY": "12345"
         },
         body: JSON.stringify({
+            moisture: Number(moisture),
+            temperature: Number(temperature)
+        })
+    })
+    .then(res => res.json())
+    .then(data => {
+
+        if(data.error){
+            alert(data.error);
+            isLoading = false;
+            return;
+        }
+
+        document.getElementById("result").innerText =
+            data.irrigation === "Yes"
+            ? "💧 Irrigation Needed"
+            : "🌿 No Irrigation Needed";
+
+        document.getElementById("status").innerText =
+            Number(moisture) < 40
+            ? "⚠️ Soil is Dry"
+            : "✅ Soil is Healthy";
+
+        document.getElementById("fill").style.width = moisture + "%";
+
+        isLoading = false;
+    })
+    .catch(err => {
+        alert("Error connecting to backend");
+        isLoading = false;
+    });
+}
+
+// 🤖 Chatbot
+function chat() {
+    let query = document.getElementById("query").value;
+    let moisture = document.getElementById("moisture").value;
+    let temperature = document.getElementById("temperature").value;
+
+    fetch("http://127.0.0.1:5000/chat", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            query: query,
             moisture: parseInt(moisture),
             temperature: parseInt(temperature)
         })
     })
     .then(res => res.json())
     .then(data => {
-        if(data.error){
-            document.getElementById("result").innerText = data.error;
-        } else {
-            document.getElementById("result").innerText =
-                data.irrigation === "Yes"
-                ? "💧 Irrigation Needed"
-                : "🌿 No Irrigation Needed";
-        }
-
-        // 🌡️ Status Indicator
-        if(moisture < 40) {
-            document.getElementById("status").innerText = "⚠️ Soil is Dry";
-        } else {
-            document.getElementById("status").innerText = "✅ Soil is Healthy";
-        }
-
-        // 💧 Moisture Bar
-        document.getElementById("fill").style.width = moisture + "%";
-    })
-    .catch(err => {
-        document.getElementById("result").innerText = "Error connecting to backend";
+        document.getElementById("chatResponse").innerText = data.reply;
     });
 }
 
-// 🤖 Chatbot (unchanged logic)
-function chat() {
-    let query = document.getElementById("query").value.toLowerCase();
-
-    let moisture = document.getElementById("moisture").value;
-    let temperature = document.getElementById("temperature").value;
-
-    if(query.includes("water")) {
-        if(moisture < 40)
-            document.getElementById("chatResponse").innerText =
-                "Soil moisture is low → Irrigation required";
-        else
-            document.getElementById("chatResponse").innerText =
-                "Soil moisture is sufficient → No irrigation needed";
-    }
-    else if(query.includes("temperature")) {
-        document.getElementById("chatResponse").innerText =
-            "Temperature is " + temperature + "°C";
-    }
-    else if(query.includes("moisture")) {
-        document.getElementById("chatResponse").innerText =
-            "Soil moisture is " + moisture;
-    }
-    else {
-        document.getElementById("chatResponse").innerText =
-            "Sorry, I didn't understand.";
-    }
-}
-
-// ☁️ Load data from ThingSpeak (unchanged logic)
+// ☁️ Load data
 function loadData() {
     fetch("https://api.thingspeak.com/channels/3339987/feeds/last.json")
     .then(res => res.json())
     .then(data => {
         document.getElementById("moisture").value = data.field1;
         document.getElementById("temperature").value = data.field2;
-    })
-    .catch(err => {
-        alert("Error fetching data from cloud");
     });
 }
 

@@ -8,21 +8,28 @@ from time import time
 app = Flask(__name__)
 CORS(app)
 
+# 🔐 API KEY
 API_KEY = "12345"
 
+# 🤖 Load ML model
 model = pickle.load(open('../ml_model/model.pkl', 'rb'))
 
+# 🛡️ Store request logs for rate limiting
 request_log = {}
 
+# 📜 Logging function
 def log_request(ip, status):
     with open("security_log.txt", "a") as f:
         f.write(f"{datetime.datetime.now()} | IP: {ip} | {status}\n")
 
+# 🔐 Hashing function (data integrity)
 def generate_hash(data):
     return hashlib.sha256(str(data).encode()).hexdigest()
 
+# 🚫 RATE LIMIT (FIXED)
 @app.before_request
 def limit_requests():
+    # ✅ Ignore OPTIONS (CORS preflight)
     if request.method == "OPTIONS":
         return
 
@@ -32,18 +39,22 @@ def limit_requests():
     if ip not in request_log:
         request_log[ip] = []
 
+    # Keep only last 30 seconds data
     request_log[ip] = [t for t in request_log[ip] if current_time - t < 30]
 
+    # Increased limit
     if len(request_log[ip]) > 20:
         log_request(ip, "Rate limit exceeded")
         return jsonify({"error": "Too many requests. Try later."}), 429
 
     request_log[ip].append(current_time)
 
+# 🌱 MAIN API
 @app.route('/predict', methods=['POST'])
 def predict():
     ip = request.remote_addr
 
+    # 🔐 API KEY CHECK
     client_key = request.headers.get("X-API-KEY")
 
     if not client_key:
@@ -54,6 +65,7 @@ def predict():
         log_request(ip, "Unauthorized access")
         return jsonify({"error": "Unauthorized access"}), 401
 
+    # 📥 Get data
     data = request.json
 
     if not data:
@@ -75,6 +87,7 @@ def predict():
         log_request(ip, "Invalid data type")
         return jsonify({"error": "Invalid data type"}), 400
 
+    # 🤖 ML Prediction
     result = model.predict([[moisture, temp]])[0]
 
     response = {
@@ -83,15 +96,18 @@ def predict():
         "temperature": temp
     }
 
+    # 🔐 Add hash for data integrity
     response["hash"] = generate_hash(response)
 
     log_request(ip, "Authorized request")
 
     return jsonify(response)
 
+# 🌐 Home route
 @app.route('/')
 def home():
     return "Smart Farming Backend Running Securely 🚀"
 
+# 🚀 Run server
 if __name__ == "__main__":
     app.run(debug=True)
