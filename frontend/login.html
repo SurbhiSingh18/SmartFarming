@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Login</title>
+
+    <style>
+        body {
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            /* 🌄 Background image */
+            background: url("farm.png") no-repeat center center/cover;
+            font-family: Arial;
+        }
+
+        /* 🌫️ Glass effect */
+        #box {
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            padding: 30px;
+            border-radius: 15px;
+            width: 320px;
+            text-align: center;
+            box-shadow: 0 0 20px rgba(0,0,0,0.3);
+        }
+
+        h2 {
+            color: #e8efe9;
+        }
+
+        input {
+            width: 90%;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border: none;
+        }
+
+        button {
+            padding: 8px 12px;
+            margin: 5px;
+            background-color: #2e7d32;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #1b5e20;
+        }
+
+        #msg {
+            color: red;
+        }
+
+        #strength {
+            font-size: 14px;
+            margin-top: 5px;
+        }
+
+        #box h2,
+        #box h3,
+        #box p {
+            color: white;
+            text-shadow: 1px 1px 5px rgba(0,0,0,0.7);
+        }
+
+    </style>
+</head>
+
+<body>
+
+<div id="box">
+
+    <h2>🌱 Smart Farming</h2>
+
+    <h3>🔐 Signup / Login</h3>
+
+    <input id="username" placeholder="Enter Username"><br>
+    <input id="password" type="password" placeholder="Enter Password" oninput="checkStrength()"><br>
+
+    <div id="strength"></div>
+
+    <button onclick="signup()">Signup</button>
+    <button onclick="login()">Login</button>
+
+    <p id="msg"></p>
+</div>
+
+<script>
+
+// 🔐 PASSWORD STRENGTH
+function checkStrength() {
+    let pass = document.getElementById("password").value;
+    let strength = document.getElementById("strength");
+
+    let score = 0;
+
+    if(pass.length >= 8) score++;
+    if(/[0-9]/.test(pass)) score++;
+    if(/[!@#$%^&*]/.test(pass)) score++;
+
+    if(score === 1){
+        strength.innerText = "Weak ❌";
+        strength.style.color = "red";
+    }
+    else if(score === 2){
+        strength.innerText = "Medium ⚠️";
+        strength.style.color = "orange";
+    }
+    else if(score === 3){
+        strength.innerText = "Strong ✅";
+        strength.style.color = "dark green";
+    }
+    else{
+        strength.innerText = "";
+    }
+}
+
+// 🔐 VALIDATION
+function validatePassword(password) {
+    if(password.length < 8) return "Min 8 characters";
+    if(!/[0-9]/.test(password)) return "Add a number";
+    if(!/[!@#$%^&*]/.test(password)) return "Add special character";
+    return null;
+}
+
+// 🔐 SIGNUP
+function signup() {
+
+    let user = username.value;
+    let pass = password.value;
+
+    let error = validatePassword(pass);
+    if(error){
+        msg.innerText = error;
+        return;
+    }
+
+    fetch("http://127.0.0.1:5000/signup", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({username: user, password: pass})
+    })
+    .then(res => res.json())
+    .then(data => {
+        if(data.message){
+            alert("Signup successful! Now login.");
+            username.value = "";
+            password.value = "";
+            strength.innerText = "";
+        } else {
+            msg.innerText = data.error;
+        }
+    });
+}
+
+// 🔐 LOGIN
+function login() {
+
+    fetch("http://127.0.0.1:5000/login", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({
+            username: username.value,
+            password: password.value
+        })
+    })
+    .then(res => res.json())
+    .then(data => {
+        if(data.message){
+            localStorage.setItem("user", username.value);
+            window.location.href = "index.html";
+        } else {
+            msg.innerText = data.error;
+        }
+    });
+}
+
+</script>
+
+</body>
+</html>

@@ -4,17 +4,17 @@
     <title>Smart Farming Dashboard</title>
     <style>
         body {
-            font-family: Arial;
             margin: 0;
             height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            background: linear-gradient(to right, #d4fc79, #96e6a1);
+            background: url("farm.png") no-repeat center center/cover;
+            font-family: Arial;
         }
 
         h2 {
-            color: #2e7d32;
+            color: #e2e8e2;
         }
 
         input, button {
@@ -51,11 +51,12 @@
         }
 
         #container {
-            background: white;
+            background: rgba(255, 255, 255, 0.25);
+            backdrop-filter: blur(12px);
             padding: 20px;
             border-radius: 10px;
             width: 350px;
-            box-shadow: 0 0 15px rgba(0,0,0,0.2);
+            box-shadow: 0 0 20px rgba(0,0,0,0.3);
         }
 
         #bar {
@@ -68,7 +69,7 @@
 
         #fill {
             height: 20px;
-            background: green;
+            background: rgb(23, 193, 23);
             width: 0%;
             border-radius: 10px;
         }
@@ -78,6 +79,14 @@
             padding: 10px;
             border-radius: 10px;
             background: #f9f9f9;
+        }
+
+        #container h2,
+        #container h3,
+        #container label,
+        #container p {
+            color: #ffffff;
+            text-shadow: 1px 1px 5px rgba(0,0,0,0.7);
         }
     </style>
 </head>
@@ -158,6 +167,7 @@ function predict(event) {
             "X-API-KEY": "12345"
         },
         body: JSON.stringify({
+            username: localStorage.getItem("user"),
             moisture: Number(moisture),
             temperature: Number(temperature)
         })

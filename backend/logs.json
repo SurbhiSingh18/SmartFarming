@@ -1,0 +1,23 @@
+[
+    {
+        "username": "Surbhi",
+        "moisture": 25,
+        "temperature": 36,
+        "result": "Yes",
+        "time": "2026-04-14 23:24:21.080559"
+    },
+    {
+        "username": "Surbhi",
+        "moisture": 25,
+        "temperature": 36,
+        "result": "Yes",
+        "time": "2026-04-14 23:52:44.372826"
+    },
+    {
+        "username": "Surbhi",
+        "moisture": 25,
+        "temperature": 36,
+        "result": "Yes",
+        "time": "2026-04-15 00:07:26.061551"
+    }
+]
