@@ -79,7 +79,8 @@
             border: 1px solid #ccc;
             padding: 10px;
             border-radius: 10px;
-            background: #f9f9f9;
+            background: rgba(255,255,255,0.95);
+            color: rgb(35, 47, 187);
         }
 
         #historyTable {
@@ -147,6 +148,62 @@
             color: #ffffff;
             text-shadow: 1px 1px 5px rgba(0,0,0,0.7);
         }
+
+        #chatbox,
+        #chatbox p,
+        #chatbox input {
+            color: black !important;
+        }
+     
+        .quick-questions {
+            margin-top: 10px;
+        }
+
+        .quick-questions button {
+            margin: 3px;
+            padding: 5px 8px;
+            font-size: 12px;
+            background: #ffffff;
+            color: #2e7d32;
+            border-radius: 6px;
+            border: none;
+            cursor: pointer;
+        }
+
+        .quick-questions button:hover {
+            background: #d4f5d4;
+        }
+
+        #chatbox2 {
+            height: 180px;
+            overflow-y: auto;
+            padding: 10px;
+            background: #e5ddd5;
+            border-radius: 10px;
+            margin-bottom: 10px;
+        }
+
+        .message {
+            max-width: 70%;
+            padding: 8px;
+            margin: 5px;
+            border-radius: 10px;
+            font-size: 14px;
+            color: black;
+        }
+
+        .user {
+            background: #dcf8c6;
+            float: right;
+            clear: both;
+        }
+
+        .bot {
+            background: white;
+            float: left;
+            clear: both;
+        }
+
     </style>
 </head>
 
@@ -183,12 +240,11 @@
 <hr>
 
 <h3>💬 Chatbot</h3>
+<div id="chatbox2"></div>
 
-<div id="chatbox">
-    <input type="text" id="query" placeholder="Ask something...">
-    <button onclick="chat()">Ask</button>
-    <p id="chatResponse"></p>
-</div>
+<input type="text" id="query2" placeholder="Ask something...">
+<button onclick="chat2()">Send</button>
+<button onclick="clearChat()">Clear</button>
 
 <hr>
 
@@ -383,6 +439,59 @@ function loadHistory() {
 
 // 🚀 Load history on page load
 loadHistory();
+
+function askQuestion(q) {
+    document.getElementById("query").value = q;
+    chat();
+}
+
+const chatbox2 = document.getElementById("chatbox2");
+
+function addMessage(msg, type){
+    let div = document.createElement("div");
+    div.classList.add("message", type);
+    div.innerText = msg;
+    chatbox2.appendChild(div);
+    chatbox2.scrollTop = chatbox2.scrollHeight;
+}
+
+function chat2(){
+    let q = document.getElementById("query2").value;
+    let m = document.getElementById("moisture").value;
+    let t = document.getElementById("temperature").value;
+
+    if(q.trim() === ""){
+        alert("Ask something!");
+        return;
+    }
+
+    addMessage(q, "user");
+
+    fetch("http://127.0.0.1:5000/chat", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({
+            query: q,
+            moisture: Number(m || 0),
+            temperature: Number(t || 0)
+        })
+    })
+    .then(res => res.json())
+    .then(data => {
+        addMessage(data.reply, "bot");
+    });
+
+    document.getElementById("query2").value = "";
+}
+
+function clearChat(){
+    chatbox2.innerHTML = "";
+}
+
+function quickAsk(q){
+    document.getElementById("query2").value = q;
+    chat2();
+}
 
 </script>
 
