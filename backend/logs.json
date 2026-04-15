@@ -19,5 +19,54 @@
         "temperature": 36,
         "result": "Yes",
         "time": "2026-04-15 00:07:26.061551"
+    },
+    {
+        "username": "Suyashnaidu",
+        "moisture": 26,
+        "temperature": 40,
+        "result": "Yes",
+        "time": "2026-04-15 13:03:37.460587"
+    },
+    {
+        "username": "guest",
+        "moisture": 30,
+        "temperature": 28,
+        "result": "Yes",
+        "time": "2026-04-15 15:51:26.887804"
+    },
+    {
+        "username": "guest",
+        "moisture": 30,
+        "temperature": 28,
+        "result": "Yes",
+        "time": "2026-04-15 15:51:35.721879"
+    },
+    {
+        "username": "guest",
+        "moisture": 40,
+        "temperature": 27,
+        "result": "Yes",
+        "time": "2026-04-15 15:58:13.232895"
+    },
+    {
+        "username": "guest",
+        "moisture": 40,
+        "temperature": 20,
+        "result": "Yes",
+        "time": "2026-04-15 16:09:49.534292"
+    },
+    {
+        "username": "guest",
+        "moisture": 40,
+        "temperature": 40,
+        "result": "Yes",
+        "time": "2026-04-15 16:10:01.565260"
+    },
+    {
+        "username": "Suyashnaidu",
+        "moisture": 30,
+        "temperature": 40,
+        "result": "Yes",
+        "time": "2026-04-15 16:33:06.263639"
     }
 ]
