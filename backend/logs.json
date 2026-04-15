@@ -68,5 +68,104 @@
         "temperature": 40,
         "result": "Yes",
         "time": "2026-04-15 16:33:06.263639"
+    },
+    {
+        "username": "Suyashnaidu",
+        "moisture": 25,
+        "temperature": 40,
+        "result": "Yes",
+        "time": "2026-04-15 22:44:20.572296"
+    },
+    {
+        "query": "HI",
+        "reply": "Hello! I can help with soil, temperature, and irrigation advice \ud83c\udf31\n\n\ud83e\udd16 ML Prediction: Irrigation Needed \u2192 Yes",
+        "time": "2026-04-15 22:44:25.507978"
+    },
+    {
+        "query": "HI",
+        "reply": "Hello! I can help with soil, temperature, and irrigation advice \ud83c\udf31\n\n\ud83e\udd16 ML Prediction: Irrigation Needed \u2192 Yes",
+        "time": "2026-04-15 22:44:38.757361"
+    },
+    {
+        "query": "GOOD EVENING",
+        "reply": "Hello! I can help with soil, temperature, and irrigation advice \ud83c\udf31\n\n\ud83e\udd16 ML Prediction: Irrigation Needed \u2192 Yes",
+        "time": "2026-04-15 22:44:47.727175"
+    },
+    {
+        "query": "GOOD EVENING",
+        "reply": "Hello! I can help with soil, temperature, and irrigation advice \ud83c\udf31\n\n\ud83e\udd16 ML Prediction: Irrigation Needed \u2192 Yes",
+        "time": "2026-04-15 22:44:49.125619"
+    },
+    {
+        "query": "GOOD EVENING",
+        "reply": "Hello! I can help with soil, temperature, and irrigation advice \ud83c\udf31\n\n\ud83e\udd16 ML Prediction: Irrigation Needed \u2192 Yes",
+        "time": "2026-04-15 22:44:50.468090"
+    },
+    {
+        "query": "BYE",
+        "reply": "Sorry, I didn't understand.\nTry asking:\n- 'Is soil dry?'\n- 'What is temperature?'\n- 'Should I irrigate?'\n\n\ud83e\udd16 ML Prediction: Irrigation Needed \u2192 Yes",
+        "time": "2026-04-15 22:44:58.662807"
+    },
+    {
+        "query": "NO",
+        "reply": "Sorry, I didn't understand.\nTry asking:\n- 'Is soil dry?'\n- 'What is temperature?'\n- 'Should I irrigate?'\n\n\ud83e\udd16 ML Prediction: Irrigation Needed \u2192 Yes",
+        "time": "2026-04-15 22:45:11.352243"
+    },
+    {
+        "query": "NO",
+        "reply": "Sorry, I didn't understand.\nTry asking:\n- 'Is soil dry?'\n- 'What is temperature?'\n- 'Should I irrigate?'\n\n\ud83e\udd16 ML Prediction: Irrigation Needed \u2192 Yes",
+        "time": "2026-04-15 22:45:12.302562"
+    },
+    {
+        "query": "HI",
+        "reply": "Hello! I can help with soil, temperature, and irrigation advice \ud83c\udf31\n\n\ud83e\udd16 ML Prediction: Irrigation Needed \u2192 Yes",
+        "time": "2026-04-15 23:17:02.844886"
+    },
+    {
+        "query": "HI",
+        "reply": "Hello! I can help with soil, temperature, and irrigation advice \ud83c\udf31\n\n\ud83e\udd16 ML Prediction: Irrigation Needed \u2192 Yes",
+        "time": "2026-04-15 23:17:13.962831"
+    },
+    {
+        "query": "WHATS MY SOIL PREDICTION",
+        "reply": "Soil moisture is 40%. Soil is moderately wet.\n\n\ud83e\udd16 ML Prediction: Irrigation Needed \u2192 Yes",
+        "time": "2026-04-15 23:17:26.938775"
+    },
+    {
+        "query": "WHAT CAN I DO TO IMPROVE IT",
+        "reply": "Sorry, I didn't understand.\nTry asking:\n- 'Is soil dry?'\n- 'What is temperature?'\n- 'Should I irrigate?'\n\n\ud83e\udd16 ML Prediction: Irrigation Needed \u2192 Yes",
+        "time": "2026-04-15 23:18:12.154791"
+    },
+    {
+        "query": "WHAT IS TEMPERATURE",
+        "reply": "Temperature is 42\u00b0C \ud83d\udd25 (high).\n\n\ud83e\udd16 ML Prediction: Irrigation Needed \u2192 Yes",
+        "time": "2026-04-15 23:18:27.701737"
+    },
+    {
+        "username": "Suyashnaidu",
+        "moisture": 40,
+        "temperature": 40,
+        "result": "Yes",
+        "time": "2026-04-16 01:48:11.563832"
+    },
+    {
+        "query": "WHAT IS MY TEMPERATURE",
+        "reply": "Temperature is 40\u00b0C \ud83d\udd25 (high).",
+        "time": "2026-04-16 01:48:35.323635"
+    },
+    {
+        "query": "WHAT IS MY SOIL TYPE",
+        "reply": "Soil moisture is 40%. Soil is moderately wet.",
+        "time": "2026-04-16 01:48:48.512421"
+    },
+    {
+        "query": "IMPROVEMENT",
+        "reply": "Sorry, I didn't understand.\nTry asking:\n- 'Is soil dry?'\n- 'What is temperature?'\n- 'Should I irrigate?'",
+        "time": "2026-04-16 01:48:58.853529"
+    },
+    {
+        "query": "WHAT IS MOISTURE",
+        "reply": "Soil moisture is 40%. Soil is moderately wet.",
+        "time": "2026-04-16 01:49:11.208537"
     }
 ]

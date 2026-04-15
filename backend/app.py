@@ -1,4 +1,5 @@
 from flask import Flask, request, jsonify
+from chatbot.chatbot import get_response
 from flask_cors import CORS
 import pickle
 import hashlib
@@ -173,6 +174,36 @@ def logs():
 @app.route('/')
 def home():
     return "Backend Running 🚀"
+
+# 🤖 CHATBOT
+@app.route('/chat', methods=['POST'])
+def chat():
+    data = request.json or {}
+
+    query = data.get("query", "")
+
+    try:
+        moisture = int(data.get("moisture", 0))
+        temperature = int(data.get("temperature", 0))
+    except:
+        return jsonify({"error": "Invalid sensor values"}), 400
+
+    if not str(query).strip():
+        return jsonify({"error": "Query is required"}), 400
+
+    # ✅ ONLY teammate logic (NO ML ADDITION)
+    reply = get_response(query, moisture, temperature)
+
+    # 💾 Save chat logs
+    logs = load_json("logs.json")
+    logs.append({
+        "query": query,
+        "reply": reply,
+        "time": str(datetime.datetime.now())
+    })
+    save_json("logs.json", logs)
+
+    return jsonify({"reply": reply})
 
 if __name__ == "__main__":
     app.run(debug=True)
