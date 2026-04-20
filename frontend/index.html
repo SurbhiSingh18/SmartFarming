@@ -329,8 +329,8 @@ function predict(event) {
         // 📌 Status
         document.getElementById("status").innerText =
             Number(moisture) < 40
-            ? "⚠️ Soil is Dry"
-            : "✅ Soil is Healthy";
+            ? "✅ Soil is Dry"
+            : "⚠️ Soil contains water";
 
         // 📊 Progress bar
         document.getElementById("fill").style.width = moisture + "%";
